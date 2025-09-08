@@ -1,0 +1,333 @@
+// import React, { useState, useEffect } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+// import Tea1 from '../../assets/tea1.png'
+
+// const images = [
+//   Tea1,
+//   "https://www.teabench.in/assets/img/webp/blackpngnewbig.webp",
+//   "https://www.teabench.in/assets/img/webp/IMG_0170new.webp",
+// ];
+
+// const content = [
+//   {
+//     title: "A HEALTHY SIP!",
+//     description:
+//       "Ya! It's cup of tea, let's be fresh and cherish every moment in each sip. It's refreshing burst and where there is tea, there is always freshness ...",
+//   },
+//   {
+//     title: "ANOTHER GREAT SIP!",
+//     description:
+//       "This is another great tea experience. Enjoy the burst of flavor.",
+//   },
+//   {
+//     title: "A THIRD SIP!",
+//     description: "Yet another refreshing experience. Experience the tea.",
+//   },
+// ];
+
+// // background colors for each slide
+// const colors = ["#faeae6", "#e0f7fa", "#fff3cd"];
+
+// function ImageShowcase() {
+//   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+//   const [bgColor, setBgColor] = useState(colors[0]);
+//   const [waveEffect, setWaveEffect] = useState({
+//     active: false,
+//     x: window.innerWidth / 2,
+//     y: window.innerHeight / 2,
+//     color: colors[0],
+//     targetIndex: 0,
+//   });
+
+//   // Trigger wave
+//   const triggerWave = (
+//     index,
+//     x = window.innerWidth / 2,
+//     y = window.innerHeight / 2
+//   ) => {
+//     const nextColor = colors[index];
+//     setWaveEffect({
+//       active: true,
+//       x,
+//       y,
+//       color: nextColor,
+//       targetIndex: index,
+//     });
+//   };
+
+//   // Auto slide every 5 seconds
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       const nextIndex = (currentImageIndex + 1) % images.length;
+//       triggerWave(nextIndex);
+//     }, 5000);
+//     return () => clearInterval(interval);
+//   }, [currentImageIndex]);
+
+//   // Handle indicator click
+//   const handleImageClick = (index, e) => {
+//     const rect = e.currentTarget.getBoundingClientRect();
+//     const x = rect.left + rect.width / 2 + window.scrollX;
+//     const y = rect.top + rect.height / 2 + window.scrollY;
+//     triggerWave(index, x, y);
+//   };
+
+//   return (
+//     <div
+//       className="relative flex flex-col h-[100vh] py-8 w-full overflow-hidden transition-colors duration-500"
+//       style={{ backgroundColor: bgColor }}
+//     >
+//       {/* Wave Background Animation */}
+//       {/* Wave Background Animation */}
+//       <AnimatePresence>
+//         {waveEffect.active && (
+//           <motion.div
+//             initial={{ scale: 0, opacity: 0 }}
+//             animate={{
+//               scale: [0, 10, 20], // grow in steps
+//               opacity: [0.2, 0.8, 0], // fade in, then fade out
+//             }}
+//             transition={{ duration: 1, ease: "easeOut" }}
+//             style={{
+//               position: "absolute",
+//               top: waveEffect.y,
+//               left: waveEffect.x,
+//               width: 200,
+//               height: 200,
+//               borderRadius: "50%",
+//               background: waveEffect.color,
+//               transform: "translate(-50%, -50%)",
+//               zIndex: 10,
+//               pointerEvents: "none",
+//             }}
+//             onAnimationComplete={() => {
+//               // ✅ only after wave finishes
+//               setCurrentImageIndex(waveEffect.targetIndex);
+//               setBgColor(waveEffect.color);
+//               setWaveEffect((prev) => ({ ...prev, active: false }));
+//             }}
+//           />
+//         )}
+//       </AnimatePresence>
+
+//       {/* Main Content */}
+//       <div className="container mx-auto flex flex-col md:flex-row items-center px-4 max-h-[80vh] flex-grow relative z-20">
+//         {/* Image on the Left */}
+//         <div className="w-full md:w-1/2 p-4 flex justify-center">
+//           <motion.img
+//             key={currentImageIndex}
+//             src={images[currentImageIndex]}
+//             alt={`Slide ${currentImageIndex + 1}`}
+//             className="max-h-[70vh] object-contain rounded-lg"
+//             initial={{ opacity: 0, scale: 0.95 }}
+//             animate={{ opacity: 1, scale: 1 }}
+//             transition={{ duration: 0.5 }}
+//           />
+//         </div>
+
+//         {/* Content on the Right */}
+//         <motion.div
+//           key={currentImageIndex + "-content"}
+//           className="w-full md:w-1/2 p-4"
+//           initial={{ opacity: 0, x: 30 }}
+//           animate={{ opacity: 1, x: 0 }}
+//           transition={{ duration: 0.5 }}
+//         >
+//           <h2 className="text-3xl font-bold text-gray-800 mb-4">
+//             {content[currentImageIndex].title}
+//           </h2>
+//           <p className="text-gray-700">
+//             {content[currentImageIndex].description}
+//           </p>
+//         </motion.div>
+//       </div>
+
+//       {/* Image Indicators */}
+//       <div className="flex justify-center mt-4 space-x-2 relative z-20">
+//         {images.map((image, index) => (
+//           <button
+//             key={index}
+//             onClick={(e) => handleImageClick(index, e)}
+//             className={`rounded-md overflow-hidden w-16 h-16 relative ${
+//               currentImageIndex === index
+//                 ? "ring-2 ring-orange-500"
+//                 : "hover:opacity-75"
+//             }`}
+//           >
+//             <img
+//               src={image}
+//               alt={`Thumbnail ${index + 1}`}
+//               className="w-full h-full object-cover"
+//             />
+//           </button>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default ImageShowcase;
+
+
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// --- For demonstration, let's use three distinct images ---
+const images = [
+  "https://ik.imagekit.io/teabench/image_slider1_kP77F4T7M.png",
+  "https://ik.imagekit.io/teabench/image_slider2__xY-zL9wB.png",
+  "https://ik.imagekit.io/teabench/image_slider3_m2R-x_Hk9.png",
+];
+
+const content = [
+  {
+    title: "A HEALTHY SIP!",
+    description:
+      "Ya! It's cup of tea, let's be fresh and cherish every moment in each sip. It's refreshing burst and where there is tea, there is always freshness ...",
+  },
+  {
+    title: "ANOTHER GREAT SIP!",
+    description: "This is another great tea experience. Enjoy the burst of flavor.",
+  },
+  {
+    title: "A THIRD SIP!",
+    description: "Yet another refreshing experience. Experience the tea.",
+  },
+];
+
+function ImageShowcase() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [waveEffect, setWaveEffect] = useState({ active: false, x: "50%", y: "50%" });
+  const [isTransitioning, setIsTransitioning] = useState(false); // <-- NEW: State for background animation
+
+  // MODIFIED: Handle both manual + auto wave and background color
+  const triggerWave = (index, x = "50%", y = "50%") => {
+    // Prevent new animations if one is already running
+    if (isTransitioning) return; 
+
+    setIsTransitioning(true); // <-- MODIFIED: Start the background color transition
+    setWaveEffect({ active: true, x, y });
+
+    // This timeout is now our master orchestrator
+    setTimeout(() => {
+      setCurrentImageIndex(index); // Change the content
+      setIsTransitioning(false); // <-- MODIFIED: Start transitioning the background back to white
+    }, 600); // Timed to match the wave animation duration
+  };
+
+  // Auto slide every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextIndex = (currentImageIndex + 1) % images.length;
+      // For auto-slide, wave originates from the center
+      triggerWave(nextIndex, "50%", "50%");
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [currentImageIndex, isTransitioning]); // <-- MODIFIED: depend on isTransitioning to avoid race conditions
+
+  const handleImageClick = (index, e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    // Calculate click position relative to the viewport for the wave origin
+    const x = `${rect.left + rect.width / 2}px`;
+    const y = `${rect.top + rect.height / 2}px`;
+    triggerWave(index, x, y);
+  };
+
+  return (
+    // <-- MODIFIED: Changed div to motion.div to animate background
+    <motion.div
+      className="relative flex flex-col h-[100vh] py-8 w-full overflow-hidden"
+      // Animate background color based on our new state
+      animate={{ backgroundColor: isTransitioning ? "#fb923c" : "#ffffff" }}
+      transition={{ duration: 0.6, ease: "easeInOut" }}
+    >
+      {/* Wave Background Animation */}
+      <AnimatePresence>
+        {waveEffect.active && (
+          <motion.div
+            key="wave"
+            initial={{ scale: 0, opacity: 0.5 }}
+            animate={{ scale: 30, opacity: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            style={{
+              position: "absolute",
+              top: waveEffect.y,
+              left: waveEffect.x,
+              width: 100, // smaller initial size feels better
+              height: 100,
+              borderRadius: "50%",
+              background: "#f97316", // A slightly darker orange for contrast
+              transform: "translate(-50%, -50%)",
+              zIndex: 10,
+              pointerEvents: "none",
+            }}
+            onAnimationComplete={() => setWaveEffect({ active: false, x: "50%", y: "50%" })}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Main Content */}
+      <div className="container mx-auto flex flex-col md:flex-row items-center px-4 max-h-[80vh] flex-grow relative z-20">
+        {/* Image on the Left */}
+        <div className="w-full md:w-1/2 p-4 flex justify-center">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={currentImageIndex}
+              src={images[currentImageIndex]}
+              alt={`Slide ${currentImageIndex + 1}`}
+              className="max-h-[70vh] object-contain rounded-lg"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.4 }}
+            />
+          </AnimatePresence>
+        </div>
+
+        {/* Content on the Right */}
+        <div className="w-full md:w-1/2 p-4 max-h-[70vh]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentImageIndex + "-content"}
+              className="overflow-y-auto"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+            >
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                {content[currentImageIndex].title}
+              </h2>
+              <p className="text-gray-700">{content[currentImageIndex].description}</p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Image Indicators */}
+      <div className="flex justify-center mt-4 space-x-2 relative z-20">
+        {images.map((image, index) => (
+          <button
+            key={index}
+            onClick={(e) => handleImageClick(index, e)}
+            className={`rounded-md overflow-hidden w-16 h-16 relative transition-opacity duration-300 ${
+              currentImageIndex === index
+                ? "ring-2 ring-orange-500"
+                : "hover:opacity-75"
+            }`}
+          >
+            <img
+              src={image}
+              alt={`Thumbnail ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </button>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+export default ImageShowcase;
